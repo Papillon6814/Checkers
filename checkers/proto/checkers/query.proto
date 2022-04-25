@@ -13,10 +13,6 @@ option go_package = "github.com/alice/checkers/x/checkers/types";
 
 // Query defines the gRPC querier service.
 service Query {
-  // Parameters queries the parameters of the module.
-  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/alice/checkers/checkers/params";
-  }
   // Queries a NextGame by index.
 	rpc NextGame(QueryGetNextGameRequest) returns (QueryGetNextGameResponse) {
 		option (google.api.http).get = "/alice/checkers/checkers/next_game";
@@ -30,7 +26,6 @@ service Query {
 	rpc StoredGameAll(QueryAllStoredGameRequest) returns (QueryAllStoredGameResponse) {
 		option (google.api.http).get = "/alice/checkers/checkers/stored_game";
 	}
-
 // this line is used by starport scaffolding # 2
 }
 
@@ -40,21 +35,21 @@ message QueryParamsRequest {}
 // QueryParamsResponse is response type for the Query/Params RPC method.
 message QueryParamsResponse {
   // params holds all the parameters of this module.
-  Params params = 1 [(gogoproto.nullable) = false];
+  Params params = 1;
 }
 
 message QueryGetNextGameRequest {}
 
 message QueryGetNextGameResponse {
-	NextGame NextGame = 1 [(gogoproto.nullable) = false];
+	NextGame NextGame = 1;
 }
+
 message QueryGetStoredGameRequest {
 	  string index = 1;
-
 }
 
 message QueryGetStoredGameResponse {
-	StoredGame storedGame = 1 [(gogoproto.nullable) = false];
+	StoredGame storedGame = 1;
 }
 
 message QueryAllStoredGameRequest {
@@ -62,7 +57,7 @@ message QueryAllStoredGameRequest {
 }
 
 message QueryAllStoredGameResponse {
-	repeated StoredGame storedGame = 1 [(gogoproto.nullable) = false];
+	repeated StoredGame storedGame = 1;
 	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
