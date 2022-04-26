@@ -52,6 +52,18 @@ func (k msgServer) PlayMove(goCtx context.Context, msg *types.MsgPlayMove) (*typ
 	storedGame.Turn = game.Turn.Color
 	k.Keeper.SetStoredGame(storedGame)
 
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(sdk.EventTypeMessage,
+		   sdk.NewAttribute(sdk.AttributeKeyModule, "checkers"),
+		   sdk.NewAttribute(sdk.AttributeKeyAction, types.PlayMoveEventKey),
+		   sdk.NewAttribute(types.PlayMoveEventCreator, msg.Creator),
+		   sdk.NewAttribute(types.PlayMoveEventIdValue, msg.IdValue),
+		   sdk.NewAttribute(types.PlayMoveEventCapturedX, strconv.FormatInt(int64(captured.X), 10)),
+		   sdk.NewAttribute(types.PlayMoveEventCapturedY, strconv.FormatInt(int64(captured.Y), 10)),
+		   sdk.NewAttribute(types.PlayMoveEventWinner, game.Winner().Color),
+	   ),
+   )   
+
 	return &types.MsgPlayMoveResponse{
 		IdValue: msg.IdValue,
 		CapturedX: int64(captured.X),
