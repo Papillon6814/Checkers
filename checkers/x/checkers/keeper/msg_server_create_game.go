@@ -3,9 +3,9 @@ package keeper
 import (
 	"context"
 
+	"github.com/alice/checkers/x/checkers/rules"
 	"github.com/alice/checkers/x/checkers/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/alice/checkers/x/checkers/rules"
 )
 
 func (k msgServer) CreateGame(goCtx context.Context, msg *types.MsgCreateGame) (*types.MsgCreateGameResponse, error) {
@@ -19,10 +19,10 @@ func (k msgServer) CreateGame(goCtx context.Context, msg *types.MsgCreateGame) (
 
 	storedGame := types.StoredGame{
 		Creator: msg.Creator,
-		Index: newIndex,
-		Games: rules.New().String(),
-		Red: msg.Red,
-		Black: msg.Black,
+		Index:   newIndex,
+		Games:   rules.New().String(),
+		Red:     msg.Red,
+		Black:   msg.Black,
 	}
 
 	err := storedGame.Validate()
