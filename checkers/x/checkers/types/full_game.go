@@ -3,7 +3,7 @@ package types
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/xavierlepretre/checkers/x/checkers/rules"
+	"github.com/alice/checkers/x/checkers/rules"
 )
 
 func (storedGame *StoredGame) GetCreatorAddress(creator sdk.AccAddress, err error) {

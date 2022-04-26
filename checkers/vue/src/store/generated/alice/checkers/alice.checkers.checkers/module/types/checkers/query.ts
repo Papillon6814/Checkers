@@ -573,8 +573,6 @@ export const QueryAllStoredGameResponse = {
 
 /** Query defines the gRPC querier service. */
 export interface Query {
-  /** Parameters queries the parameters of the module. */
-  Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
   /** Queries a NextGame by index. */
   NextGame(request: QueryGetNextGameRequest): Promise<QueryGetNextGameResponse>;
   /** Queries a StoredGame by index. */
@@ -592,16 +590,6 @@ export class QueryClientImpl implements Query {
   constructor(rpc: Rpc) {
     this.rpc = rpc;
   }
-  Params(request: QueryParamsRequest): Promise<QueryParamsResponse> {
-    const data = QueryParamsRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "alice.checkers.checkers.Query",
-      "Params",
-      data
-    );
-    return promise.then((data) => QueryParamsResponse.decode(new Reader(data)));
-  }
-
   NextGame(
     request: QueryGetNextGameRequest
   ): Promise<QueryGetNextGameResponse> {

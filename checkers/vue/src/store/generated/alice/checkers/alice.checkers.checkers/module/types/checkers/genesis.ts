@@ -1,5 +1,4 @@
 /* eslint-disable */
-import { Params } from "../checkers/params";
 import { NextGame } from "../checkers/next_game";
 import { StoredGame } from "../checkers/stored_game";
 import { Writer, Reader } from "protobufjs/minimal";
@@ -8,9 +7,7 @@ export const protobufPackage = "alice.checkers.checkers";
 
 /** GenesisState defines the checkers module's genesis state. */
 export interface GenesisState {
-  params: Params | undefined;
   nextGame: NextGame | undefined;
-  /** this line is used by starport scaffolding # genesis/proto/state */
   storedGameList: StoredGame[];
 }
 
@@ -18,14 +15,11 @@ const baseGenesisState: object = {};
 
 export const GenesisState = {
   encode(message: GenesisState, writer: Writer = Writer.create()): Writer {
-    if (message.params !== undefined) {
-      Params.encode(message.params, writer.uint32(10).fork()).ldelim();
-    }
     if (message.nextGame !== undefined) {
-      NextGame.encode(message.nextGame, writer.uint32(18).fork()).ldelim();
+      NextGame.encode(message.nextGame, writer.uint32(10).fork()).ldelim();
     }
     for (const v of message.storedGameList) {
-      StoredGame.encode(v!, writer.uint32(26).fork()).ldelim();
+      StoredGame.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -39,12 +33,9 @@ export const GenesisState = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.params = Params.decode(reader, reader.uint32());
-          break;
-        case 2:
           message.nextGame = NextGame.decode(reader, reader.uint32());
           break;
-        case 3:
+        case 2:
           message.storedGameList.push(
             StoredGame.decode(reader, reader.uint32())
           );
@@ -60,11 +51,6 @@ export const GenesisState = {
   fromJSON(object: any): GenesisState {
     const message = { ...baseGenesisState } as GenesisState;
     message.storedGameList = [];
-    if (object.params !== undefined && object.params !== null) {
-      message.params = Params.fromJSON(object.params);
-    } else {
-      message.params = undefined;
-    }
     if (object.nextGame !== undefined && object.nextGame !== null) {
       message.nextGame = NextGame.fromJSON(object.nextGame);
     } else {
@@ -80,8 +66,6 @@ export const GenesisState = {
 
   toJSON(message: GenesisState): unknown {
     const obj: any = {};
-    message.params !== undefined &&
-      (obj.params = message.params ? Params.toJSON(message.params) : undefined);
     message.nextGame !== undefined &&
       (obj.nextGame = message.nextGame
         ? NextGame.toJSON(message.nextGame)
@@ -99,11 +83,6 @@ export const GenesisState = {
   fromPartial(object: DeepPartial<GenesisState>): GenesisState {
     const message = { ...baseGenesisState } as GenesisState;
     message.storedGameList = [];
-    if (object.params !== undefined && object.params !== null) {
-      message.params = Params.fromPartial(object.params);
-    } else {
-      message.params = undefined;
-    }
     if (object.nextGame !== undefined && object.nextGame !== null) {
       message.nextGame = NextGame.fromPartial(object.nextGame);
     } else {

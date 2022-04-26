@@ -2,10 +2,12 @@ import { txClient, queryClient, MissingWalletError , registry} from './module'
 
 import { NextGame } from "./module/types/checkers/next_game"
 import { Params } from "./module/types/checkers/params"
+import { QueryParamsRequest } from "./module/types/checkers/query"
+import { QueryParamsResponse } from "./module/types/checkers/query"
 import { StoredGame } from "./module/types/checkers/stored_game"
 
 
-export { NextGame, Params, StoredGame };
+export { NextGame, Params, QueryParamsRequest, QueryParamsResponse, StoredGame };
 
 async function initTxClient(vuexGetters) {
 	return await txClient(vuexGetters['common/wallet/signer'], {
@@ -43,7 +45,6 @@ function getStructure(template) {
 
 const getDefaultState = () => {
 	return {
-				Params: {},
 				NextGame: {},
 				StoredGame: {},
 				StoredGameAll: {},
@@ -51,6 +52,8 @@ const getDefaultState = () => {
 				_Structure: {
 						NextGame: getStructure(NextGame.fromPartial({})),
 						Params: getStructure(Params.fromPartial({})),
+						QueryParamsRequest: getStructure(QueryParamsRequest.fromPartial({})),
+						QueryParamsResponse: getStructure(QueryParamsResponse.fromPartial({})),
 						StoredGame: getStructure(StoredGame.fromPartial({})),
 						
 		},
@@ -80,12 +83,6 @@ export default {
 		}
 	},
 	getters: {
-				getParams: (state) => (params = { params: {}}) => {
-					if (!(<any> params).query) {
-						(<any> params).query=null
-					}
-			return state.Params[JSON.stringify(params)] ?? {}
-		},
 				getNextGame: (state) => (params = { params: {}}) => {
 					if (!(<any> params).query) {
 						(<any> params).query=null
@@ -137,28 +134,6 @@ export default {
 				}
 			})
 		},
-		
-		
-		
-		 		
-		
-		
-		async QueryParams({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params, query=null }) {
-			try {
-				const key = params ?? {};
-				const queryClient=await initQueryClient(rootGetters)
-				let value= (await queryClient.queryParams()).data
-				
-					
-				commit('QUERY', { query: 'Params', key: { params: {...key}, query}, value })
-				if (subscribe) commit('SUBSCRIBE', { action: 'QueryParams', payload: { options: { all }, params: {...key},query }})
-				return getters['getParams']( { params: {...key}, query}) ?? {}
-			} catch (e) {
-				throw new Error('QueryClient:QueryParams API Node Unavailable. Could not perform query: ' + e.message)
-				
-			}
-		},
-		
 		
 		
 		

@@ -12,14 +12,11 @@
 export type CheckersMsgCreatePostResponse = object;
 
 export interface CheckersNextGame {
+  creator?: string;
+
   /** @format uint64 */
   idValue?: string;
 }
-
-/**
- * Params defines the parameters for the module.
- */
-export type CheckersParams = object;
 
 export interface CheckersQueryAllStoredGameResponse {
   storedGame?: CheckersStoredGame[];
@@ -44,15 +41,8 @@ export interface CheckersQueryGetStoredGameResponse {
   storedGame?: CheckersStoredGame;
 }
 
-/**
- * QueryParamsResponse is response type for the Query/Params RPC method.
- */
-export interface CheckersQueryParamsResponse {
-  /** params holds all the parameters of this module. */
-  params?: CheckersParams;
-}
-
 export interface CheckersStoredGame {
+  creator?: string;
   index?: string;
   game?: string;
   turn?: string;
@@ -341,22 +331,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryNextGame = (params: RequestParams = {}) =>
     this.request<CheckersQueryGetNextGameResponse, RpcStatus>({
       path: `/alice/checkers/checkers/next_game`,
-      method: "GET",
-      format: "json",
-      ...params,
-    });
-
-  /**
-   * No description
-   *
-   * @tags Query
-   * @name QueryParams
-   * @summary Parameters queries the parameters of the module.
-   * @request GET:/alice/checkers/checkers/params
-   */
-  queryParams = (params: RequestParams = {}) =>
-    this.request<CheckersQueryParamsResponse, RpcStatus>({
-      path: `/alice/checkers/checkers/params`,
       method: "GET",
       format: "json",
       ...params,
