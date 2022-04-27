@@ -2,13 +2,13 @@ package keeper
 
 import (
 	"context"
-	"strings"
 	"strconv"
+	"strings"
 
+	rules "github.com/alice/checkers/x/checkers/rules"
 	"github.com/alice/checkers/x/checkers/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	rules "github.com/alice/checkers/x/checkers/rules"
 )
 
 func (k msgServer) PlayMove(goCtx context.Context, msg *types.MsgPlayMove) (*types.MsgPlayMoveResponse, error) {
@@ -53,6 +53,8 @@ func (k msgServer) PlayMove(goCtx context.Context, msg *types.MsgPlayMove) (*typ
 		return nil, sdkerrors.Wrapf(moveErr, types.ErrWrongMove.Error())
 	}
 
+	storedGame.MoveCount++
+
 	// Save for the next play move
 	storedGame.Game = game.String()
 	storedGame.Turn = game.Turn.Color
@@ -60,15 +62,15 @@ func (k msgServer) PlayMove(goCtx context.Context, msg *types.MsgPlayMove) (*typ
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(sdk.EventTypeMessage,
-		   sdk.NewAttribute(sdk.AttributeKeyModule, "checkers"),
-		   sdk.NewAttribute(sdk.AttributeKeyAction, types.PlayMoveEventKey),
-		   sdk.NewAttribute(types.PlayMoveEventCreator, msg.Creator),
-		   sdk.NewAttribute(types.PlayMoveEventIdValue, msg.IdValue),
-		   sdk.NewAttribute(types.PlayMoveEventCapturedX, strconv.FormatInt(int64(captured.X), 10)),
-		   sdk.NewAttribute(types.PlayMoveEventCapturedY, strconv.FormatInt(int64(captured.Y), 10)),
-		   sdk.NewAttribute(types.PlayMoveEventWinner, game.Winner().Color),
-	   ),
-   )   
+			sdk.NewAttribute(sdk.AttributeKeyModule, "checkers"),
+			sdk.NewAttribute(sdk.AttributeKeyAction, types.PlayMoveEventKey),
+			sdk.NewAttribute(types.PlayMoveEventCreator, msg.Creator),
+			sdk.NewAttribute(types.PlayMoveEventIdValue, msg.IdValue),
+			sdk.NewAttribute(types.PlayMoveEventCapturedX, strconv.FormatInt(int64(captured.X), 10)),
+			sdk.NewAttribute(types.PlayMoveEventCapturedY, strconv.FormatInt(int64(captured.Y), 10)),
+			sdk.NewAttribute(types.PlayMoveEventWinner, game.Winner().Color),
+		),
+	)
 
 	// What to inform
 	return &types.MsgPlayMoveResponse{

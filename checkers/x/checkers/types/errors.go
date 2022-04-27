@@ -16,13 +16,6 @@ var (
 	ErrCreatorNotPlayer = sdkerrors.Register(ModuleName, 1105, "message creator is not a player: %s")
 	ErrNotPlayerTurn    = sdkerrors.Register(ModuleName, 1106, "player tried to play out of turn: %s")
 	ErrWrongMove        = sdkerrors.Register(ModuleName, 1107, "wrong move")
-)
-
-const (
-    PlayMoveEventKey       = "MovePlayed"
-    PlayMoveEventCreator   = "Creator"
-    PlayMoveEventIdValue   = "IdValue"
-    PlayMoveEventCapturedX = "CapturedX"
-    PlayMoveEventCapturedY = "CapturedY"
-    PlayMoveEventWinner    = "Winner"
+	ErrRedAlreadyPlayed   = sdkerrors.Register(ModuleName, 1108, "red player has already played")
+	ErrBlackAlreadyPlayed = sdkerrors.Register(ModuleName, 1109, "black player has already played")	
 )
