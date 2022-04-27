@@ -16,7 +16,7 @@ func (k Keeper) StoredGameAll(c context.Context, req *types.QueryAllStoredGameRe
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	var storedGames []types.StoredGame
+	var storedGames []*types.StoredGame
 	ctx := sdk.UnwrapSDKContext(c)
 
 	store := ctx.KVStore(k.storeKey)
@@ -28,7 +28,7 @@ func (k Keeper) StoredGameAll(c context.Context, req *types.QueryAllStoredGameRe
 			return err
 		}
 
-		storedGames = append(storedGames, storedGame)
+		storedGames = append(storedGames, &storedGame)
 		return nil
 	})
 
@@ -53,5 +53,5 @@ func (k Keeper) StoredGame(c context.Context, req *types.QueryGetStoredGameReque
 		return nil, status.Error(codes.NotFound, "not found")
 	}
 
-	return &types.QueryGetStoredGameResponse{StoredGame: val}, nil
+	return &types.QueryGetStoredGameResponse{StoredGame: &val}, nil
 }

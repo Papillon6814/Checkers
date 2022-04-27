@@ -46,15 +46,14 @@ message QueryParamsResponse {
 message QueryGetNextGameRequest {}
 
 message QueryGetNextGameResponse {
-	NextGame NextGame = 1 [(gogoproto.nullable) = false];
+	NextGame NextGame = 1;
 }
 message QueryGetStoredGameRequest {
 	  string index = 1;
-
 }
 
 message QueryGetStoredGameResponse {
-	StoredGame storedGame = 1 [(gogoproto.nullable) = false];
+	StoredGame storedGame = 1;
 }
 
 message QueryAllStoredGameRequest {
@@ -62,7 +61,7 @@ message QueryAllStoredGameRequest {
 }
 
 message QueryAllStoredGameResponse {
-	repeated StoredGame storedGame = 1 [(gogoproto.nullable) = false];
+	repeated StoredGame storedGame = 1;
 	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 

@@ -20,5 +20,5 @@ func (k Keeper) NextGame(c context.Context, req *types.QueryGetNextGameRequest) 
 		return nil, status.Error(codes.NotFound, "not found")
 	}
 
-	return &types.QueryGetNextGameResponse{NextGame: val}, nil
+	return &types.QueryGetNextGameResponse{NextGame: &val}, nil
 }

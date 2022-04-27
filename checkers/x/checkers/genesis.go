@@ -15,23 +15,30 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	}
 	// Set all the storedGame
 	for _, elem := range genState.StoredGameList {
-		k.SetStoredGame(ctx, elem)
+		k.SetStoredGame(ctx, *elem)
 	}
 	// this line is used by starport scaffolding # genesis/module/init
-	k.SetParams(ctx, genState.Params)
 }
 
 // ExportGenesis returns the capability module's exported genesis.
 func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis := types.DefaultGenesis()
-	genesis.Params = k.GetParams(ctx)
+
+	// NOTE: ここ生成されてなかった。scaffold mapだからか？
+	// genesis.StoredGameList = k.GetAllStoredGame(ctx)
+	// NOTE* 代わりにこれがあったが、型を変更したからなのか上手く動かない。今はなんとなくなんとなくポインタを設定したりしてしまっている。
+	// Get all storedGame
+	storedGameList := k.GetAllStoredGame(ctx)
+	for _, elem := range storedGameList {
+		elem := elem
+		genesis.StoredGameList = append(genesis.StoredGameList, &elem)
+	}
 
 	// Get all nextGame
 	nextGame, found := k.GetNextGame(ctx)
 	if found {
 		genesis.NextGame = &nextGame
 	}
-	genesis.StoredGameList = k.GetAllStoredGame(ctx)
 	// this line is used by starport scaffolding # genesis/module/export
 
 	return genesis
