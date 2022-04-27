@@ -4,6 +4,6 @@ package alice.checkers.checkers;
 option go_package = "github.com/alice/checkers/x/checkers/types";
 
 message NextGame {
-  uint64 idValue = 1; 
-  
+  string Creator = 1;
+  uint64 idValue = 2; 
 }

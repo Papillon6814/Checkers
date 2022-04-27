@@ -5,15 +5,19 @@ import { util, configure, Writer, Reader } from "protobufjs/minimal";
 export const protobufPackage = "alice.checkers.checkers";
 
 export interface NextGame {
+  Creator: string;
   idValue: number;
 }
 
-const baseNextGame: object = { idValue: 0 };
+const baseNextGame: object = { Creator: "", idValue: 0 };
 
 export const NextGame = {
   encode(message: NextGame, writer: Writer = Writer.create()): Writer {
+    if (message.Creator !== "") {
+      writer.uint32(10).string(message.Creator);
+    }
     if (message.idValue !== 0) {
-      writer.uint32(8).uint64(message.idValue);
+      writer.uint32(16).uint64(message.idValue);
     }
     return writer;
   },
@@ -26,6 +30,9 @@ export const NextGame = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          message.Creator = reader.string();
+          break;
+        case 2:
           message.idValue = longToNumber(reader.uint64() as Long);
           break;
         default:
@@ -38,6 +45,11 @@ export const NextGame = {
 
   fromJSON(object: any): NextGame {
     const message = { ...baseNextGame } as NextGame;
+    if (object.Creator !== undefined && object.Creator !== null) {
+      message.Creator = String(object.Creator);
+    } else {
+      message.Creator = "";
+    }
     if (object.idValue !== undefined && object.idValue !== null) {
       message.idValue = Number(object.idValue);
     } else {
@@ -48,12 +60,18 @@ export const NextGame = {
 
   toJSON(message: NextGame): unknown {
     const obj: any = {};
+    message.Creator !== undefined && (obj.Creator = message.Creator);
     message.idValue !== undefined && (obj.idValue = message.idValue);
     return obj;
   },
 
   fromPartial(object: DeepPartial<NextGame>): NextGame {
     const message = { ...baseNextGame } as NextGame;
+    if (object.Creator !== undefined && object.Creator !== null) {
+      message.Creator = object.Creator;
+    } else {
+      message.Creator = "";
+    }
     if (object.idValue !== undefined && object.idValue !== null) {
       message.idValue = object.idValue;
     } else {
