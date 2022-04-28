@@ -19,6 +19,11 @@ func (k msgServer) PlayMove(goCtx context.Context, msg *types.MsgPlayMove) (*typ
 		return nil, sdkerrors.Wrapf(types.ErrGameNotFound, "game not found %s", msg.IdValue)
 	}
 
+	// Is the game already won? Can happen when it is forfeited.
+	if storedGame.Winner != rules.NO_PLAYER.Color {
+		return nil, types.ErrGameFinished
+	}
+
 	// Is it an expected player?
 	var player rules.Player
 	if strings.Compare(storedGame.Red, msg.Creator) == 0 {
@@ -55,19 +60,25 @@ func (k msgServer) PlayMove(goCtx context.Context, msg *types.MsgPlayMove) (*typ
 
 	storedGame.MoveCount++
 	storedGame.Deadline = types.FormatDeadline(types.GetNextDeadline(ctx))
+	storedGame.Winner = game.Winner().Color
 
 	// Send to the back of the FIFO
 	nextGame, found := k.Keeper.GetNextGame(ctx)
 	if !found {
 		panic("NextGame not found")
 	}
-	k.Keeper.SendToFifoTail(ctx, &storedGame, &nextGame)
-	k.Keeper.SetNextGame(ctx, nextGame)
+
+	if storedGame.Winner == rules.NO_PLAYER.Color {
+		k.Keeper.SendToFifoTail(ctx, &storedGame, &nextGame)
+	} else {
+		k.Keeper.RemoveFromFifo(ctx, &storedGame, &nextGame)
+	}
 
 	// Save for the next play move
 	storedGame.Game = game.String()
 	storedGame.Turn = game.Turn.Color
 	k.Keeper.SetStoredGame(ctx, storedGame)
+	k.Keeper.SetNextGame(ctx, nextGame)
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(sdk.EventTypeMessage,
