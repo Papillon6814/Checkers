@@ -83,6 +83,7 @@ export interface CheckersStoredGame {
   moveCount?: string;
   beforeId?: string;
   afterId?: string;
+  deadline?: string;
 }
 
 export interface ProtobufAny {
