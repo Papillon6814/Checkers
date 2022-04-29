@@ -1,17 +1,17 @@
 package keeper
 
 import (
-    "context"
+	"context"
 	"fmt"
 	"strings"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	rules "github.com/alice/checkers/x/checkers/rules"
 	"github.com/alice/checkers/x/checkers/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func (k Keeper) ForfeitExpiredGames(goCtx context.Context) {
-    ctx := sdk.UnwrapSDKContext(goCtx)
+	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	opponents := map[string]string{
 		rules.BLACK_PLAYER.Color: rules.RED_PLAYER.Color,

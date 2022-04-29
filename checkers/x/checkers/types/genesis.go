@@ -11,7 +11,7 @@ const DefaultIndex uint64 = 1
 func DefaultGenesis() *GenesisState {
 	return &GenesisState{
 		StoredGameList: []*StoredGame{},
-		NextGame:       &NextGame{
+		NextGame: &NextGame{
 			Creator:  "",
 			IdValue:  uint64(0),
 			FifoHead: NoFifoIdKey,
