@@ -5,6 +5,7 @@ import "gogoproto/gogo.proto";
 import "checkers/params.proto";
 import "checkers/next_game.proto";
 import "checkers/stored_game.proto";
+import "checkers/player_info.proto";
 // this line is used by starport scaffolding # genesis/proto/import
 
 option go_package = "github.com/alice/checkers/x/checkers/types";
@@ -13,5 +14,6 @@ option go_package = "github.com/alice/checkers/x/checkers/types";
 message GenesisState {
   NextGame nextGame = 1;
   repeated StoredGame storedGameList = 2;
+  repeated PlayerInfo playerInfoList = 3;
   // this line is used by starport scaffolding # genesis/proto/state
 }

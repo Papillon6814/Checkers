@@ -15,7 +15,7 @@ func NewMsgCreateGame(creator string, red string, black string, wager uint64, to
 		Red:     red,
 		Black:   black,
 		Wager:   wager,
-		Token: token,
+		Token:   token,
 	}
 }
 
