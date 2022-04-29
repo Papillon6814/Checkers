@@ -26,6 +26,12 @@ func KeyPrefix(p string) []byte {
 }
 
 const (
+	CreateGameGas = 10
+	PlayMoveGas   = 10
+	RejectGameGas = 0
+)
+
+const (
 	NextGameKey = "NextGame-value-"
 )
 
