@@ -32,6 +32,11 @@ const (
 )
 
 const (
+	LeaderboardWinnerLength = 100
+	DateAddedLayout         = DeadlineLayout
+)
+
+const (
 	NextGameKey = "NextGame-value-"
 )
 
