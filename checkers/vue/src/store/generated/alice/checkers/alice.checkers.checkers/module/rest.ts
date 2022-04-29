@@ -93,6 +93,7 @@ export interface CheckersStoredGame {
 
   /** @format uint64 */
   wager?: string;
+  token?: string;
 }
 
 export interface ProtobufAny {
